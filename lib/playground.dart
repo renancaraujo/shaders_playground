@@ -53,7 +53,7 @@ class _InnerPlaygroundState extends State<InnerPlayground> {
           child: AspectRatio(
             aspectRatio: widget.image.width / widget.image.height,
             child: ShaderBuilder(
-              assetKey: 'shaders/brightness.glsl',
+              assetKey: 'shaders/barrel_blur.glsl',
               (BuildContext context, ui.FragmentShader shader, Widget? child) {
                 shader
                   ..setFloat(0, widget.image.width.toDouble())

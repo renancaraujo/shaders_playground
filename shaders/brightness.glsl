@@ -5,7 +5,6 @@ precision mediump float;
 #include <flutter/runtime_effect.glsl>
 
 uniform vec2 uSize;
-
 uniform float uDelta;
 
 uniform sampler2D tInput;

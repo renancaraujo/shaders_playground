@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const Scaffold(
-        body: ShadersPlayground(),
-        // body: ShaderPlaygroundScrollable(),
+        // body: ShadersPlayground(),
+        body: ShaderPlaygroundScrollable(),
       ),
     );
   }

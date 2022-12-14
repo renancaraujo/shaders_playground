@@ -15,9 +15,10 @@ class Title extends StatelessWidget {
     return DefaultTextStyle.merge(
       style: theme.displayLarge!.merge(
         const TextStyle(
+          fontSize: 60,
           fontWeight: FontWeight.w900,
           color: Color(0xFF000000),
-          letterSpacing: -12,
+          letterSpacing: -5,
           height: 0.9,
         ),
       ),
@@ -36,8 +37,8 @@ class SomeOsloPhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 4 / 3,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: Image.asset(
         'assets/oslo${index % 8}.jpg',
         fit: BoxFit.cover,

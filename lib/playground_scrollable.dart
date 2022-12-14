@@ -35,9 +35,10 @@ class ShaderPlaygroundScrollable extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
                   return const Title(
-                    child: Text('Oslo photos'),
+                    child: Text('Overscroll'),
                   );
                 }
+
                 return SomeOsloPhoto(
                   key: ValueKey(index),
                   index: index,
@@ -91,35 +92,44 @@ class _ApplyShaderState extends State<ApplyShader>
         viewportDimension = notification.metrics.viewportDimension;
         if (notification is OverscrollNotification) {
           delta += notification.overscroll;
-        } else if (notification is ScrollEndNotification) {
+        } else if (notification is ScrollEndNotification ||
+            notification is ScrollUpdateNotification) {
           delta = 0.0;
         }
+
         return false;
       },
-      child: ShaderBuilder(
-        assetKey: 'shaders/brightness.glsl',
+      child: TweenAnimationBuilder(
+        tween: Tween<double>(begin: 0.0, end: delta),
+        duration:
+            delta == 0.0 ? const Duration(milliseconds: 300) : Duration.zero,
+        builder: (context, delta, _) {
+          return ShaderBuilder(
+            assetKey: 'shaders/boilerplate.glsl',
             (BuildContext context, ui.FragmentShader shader, Widget? child) {
-          final overscrollAmount = delta.abs() / viewportDimension;
+              final overscrollAmount = delta.abs() / viewportDimension;
 
-          return AnimatedSampler(
-            enabled: overscrollAmount > 0.0,
-            child: child!,
+              return AnimatedSampler(
+                enabled: overscrollAmount > 0.0,
+                child: child!,
                 (ui.Image image, Size size, Offset offset, ui.Canvas canvas) {
-              shader
-                ..setFloat(0, size.width)
-                ..setFloat(1, size.height)
-                ..setFloat(2, overscrollAmount)
-                ..setImageSampler(0, image);
+                  shader
+                    ..setFloat(0, size.width)
+                    ..setFloat(1, size.height)
+                    ..setFloat(2, overscrollAmount.clamp(0.0, 0.95))
+                    ..setImageSampler(0, image);
 
-              canvas
-                ..save()
-                ..translate(offset.dx, offset.dy)
-                ..drawRect(Offset.zero & size, Paint()..shader = shader)
-                ..restore();
+                  canvas
+                    ..save()
+                    ..translate(offset.dx, offset.dy)
+                    ..drawRect(Offset.zero & size, Paint()..shader = shader)
+                    ..restore();
+                },
+              );
             },
+            child: widget.child,
           );
         },
-        child: widget.child,
       ),
     );
   }
