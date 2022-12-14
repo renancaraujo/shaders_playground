@@ -14,8 +14,8 @@ vec2 resolution = vec2(width, height);
 float random(vec3 scale,float seed){return fract(sin(dot(gl_FragCoord.xyz+seed,scale))*43758.5453+seed);}
 
 
-float clamp(float value, float min, float max) {
-    return min(max(value, min), max);
+float clamp(float value, float minV, float maxV) {
+    return min(max(value, minV), maxV);
 }
 
 float blendReflect(float base, float blend) {

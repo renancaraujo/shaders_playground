@@ -41,7 +41,7 @@ vec4 fragment(vec2 uv, vec2 fragCoord) {
 
 void main() {
     vec2 pos = FlutterFragCoord().xy;
-    vec2 uv = pos / resolution;
+    vec2 uv = pos / uSize;
     fragColor = fragment(uv, pos);
 }
 

@@ -35,7 +35,7 @@ class InnerPlayground extends StatefulWidget {
 }
 
 class _InnerPlaygroundState extends State<InnerPlayground> {
-  var delta = 0.0;
+  var sliderValue = 0.0;
 
   final min = 0.0;
   final max = 1.0;
@@ -53,16 +53,12 @@ class _InnerPlaygroundState extends State<InnerPlayground> {
           child: AspectRatio(
             aspectRatio: widget.image.width / widget.image.height,
             child: ShaderBuilder(
-              assetKey: 'shaders/stretch.glsl',
-              (
-                BuildContext context,
-                ui.FragmentShader shader,
-                Widget? child,
-              ) {
+              assetKey: 'shaders/brightness.glsl',
+              (BuildContext context, ui.FragmentShader shader, Widget? child) {
                 shader
                   ..setFloat(0, widget.image.width.toDouble())
                   ..setFloat(1, widget.image.height.toDouble())
-                  ..setFloat(2, delta)
+                  ..setFloat(2, sliderValue)
                   ..setImageSampler(0, widget.image);
                 return CustomPaint(
                   painter: ImagePainter(shader),
@@ -76,12 +72,12 @@ class _InnerPlaygroundState extends State<InnerPlayground> {
           left: 50,
           right: 50,
           child: Slider(
-            value: delta,
+            value: sliderValue,
             min: min,
             max: max,
             onChanged: (value) {
               setState(() {
-                delta = value;
+                sliderValue = value;
               });
             },
           ),
