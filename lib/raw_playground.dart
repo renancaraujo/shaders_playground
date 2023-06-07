@@ -55,7 +55,7 @@ class _InnerPlaygroundState extends State<InnerPlayground> {
             width: 10,
             height: 10,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.transparent,
               shape: BoxShape.circle,
             ),
           ),
@@ -103,8 +103,8 @@ class MyPainter extends CustomPainter {
   late final paintGreen = Paint()..color = Colors.green;
 
   late final paintStroke = Paint()
-    ..color = Colors.green
-    ..strokeWidth = 20
+    ..color = Colors.white
+    ..strokeWidth = 0.2
     ..style = PaintingStyle.stroke;
 
 
@@ -135,49 +135,94 @@ class MyPainter extends CustomPainter {
     final clv = Offset(0, size.height/2);
     final ccv = Offset(size.width/2, size.height/2);
     final ccwarped = center;
+
     final crv = Offset(size.width, size.height/2);
 
     final blv = Offset(0, size.height);
     final bcv = Offset(size.width/2, size.height);
     final brv = Offset(size.width, size.height);
 
+    final tlccv = Offset((tlv.dx + ccv.dx)/2, (tlv.dy + ccv.dy)/2);
+    final trccv = Offset((trv.dx + ccv.dx)/2, (trv.dy + ccv.dy)/2);
+    final blccv = Offset((blv.dx + ccv.dx)/2, (blv.dy + ccv.dy)/2);
+    final brccv = Offset((brv.dx + ccv.dx)/2, (brv.dy + ccv.dy)/2);
+
+    final tlcwarped = Offset((tlv.dx + ccwarped.dx)/2, (tlv.dy + ccwarped.dy)/2);
+    final trcwarped = Offset((trv.dx + ccwarped.dx)/2, (trv.dy + ccwarped.dy)/2);
+    final blcwarped = Offset((blv.dx + ccwarped.dx)/2, (blv.dy + ccwarped.dy)/2);
+    final brcwarped = Offset((brv.dx + ccwarped.dx)/2, (brv.dy + ccwarped.dy)/2);
+
+
     final triangles = [
       // t1
-      tlv, clv, ccv,
+      tlv, tcv, tlccv,
       // t2
-      tlv, tcv, ccv,
+      tcv, ccv, tlccv,
       // t3
-      tcv, ccv, crv,
+      tlccv, ccv, clv,
       // t4
-      tcv, trv, crv,
+      tlv, tlccv, clv,
       // t5
-      clv, blv, bcv,
+      tcv, trv, trccv,
       // t6
-      clv, ccv, bcv,
+      trv, crv, trccv,
       // t7
-      ccv, bcv, brv,
+      trccv, crv, ccv,
       // t8
-      ccv, crv, brv,
+      tcv, trccv, ccv,
+      // t9
+      clv, ccv, blccv,
+      // t10
+      ccv, bcv, blccv,
+      // t11
+      blccv, bcv, blv,
+      // t12
+      clv, blccv, blv,
+      // t13
+      ccv, crv, brccv,
+      // t14
+      crv, brv, brccv,
+      // t15
+      brccv, brv, bcv,
+      // t16
+      ccv, brccv, bcv,
     ];
 
 
     final warped = [
       // t1
-      tlv, clv, ccwarped,
+      tlv, tcv, tlcwarped,
       // t2
-      tlv, tcv, ccwarped,
+      tcv, ccwarped, tlcwarped,
       // t3
-      tcv, ccwarped, crv,
+      tlcwarped, ccwarped, clv,
       // t4
-      tcv, trv, crv,
+      tlv, tlcwarped, clv,
       // t5
-      clv, blv, bcv,
+      tcv, trv, trcwarped,
       // t6
-      clv, ccwarped, bcv,
+      trv, crv, trcwarped,
       // t7
-      ccwarped, bcv, brv,
+      trcwarped, crv, ccwarped,
       // t8
-      ccwarped, crv, brv,
+      tcv, trcwarped, ccwarped,
+      // t9
+      clv, ccwarped, blcwarped,
+      // t10
+      ccwarped, bcv, blcwarped,
+      // t11
+      blcwarped, bcv, blv,
+      // t12
+      clv, blcwarped, blv,
+      // t13
+      ccwarped, crv, brcwarped,
+      // t14
+      crv, brv, brcwarped,
+      // t15
+      brcwarped, brv, bcv,
+      // t16
+      ccwarped, brcwarped, bcv,
+
     ];
 
     final vertices = ui.Vertices(
@@ -187,6 +232,8 @@ class MyPainter extends CustomPainter {
     );
 
     canvas.drawVertices(vertices, BlendMode.dst, paintShader);
+
+    canvas.drawPoints(ui.PointMode.polygon, [...warped], paintStroke);
   }
 
   @override
