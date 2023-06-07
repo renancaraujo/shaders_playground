@@ -30,8 +30,8 @@ class ShaderPlaygroundScrollable extends StatelessWidget {
                 parent: RangeMaintainingScrollPhysics(),
               ),
               addRepaintBoundaries: false,
-              itemCount: 10000,
-              cacheExtent: 10000,
+              itemCount: 1000,
+              cacheExtent: 1000.4,
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
                   return const Title(
@@ -100,7 +100,7 @@ class _ApplyShaderState extends State<ApplyShader>
         return false;
       },
       child: TweenAnimationBuilder(
-        tween: Tween<double>(begin: 0.0, end: delta),
+        tween: Tween<double>(begin: 0, end: delta),
         duration:
             delta == 0.0 ? const Duration(milliseconds: 300) : Duration.zero,
         builder: (context, delta, _) {
@@ -112,7 +112,9 @@ class _ApplyShaderState extends State<ApplyShader>
               return AnimatedSampler(
                 enabled: overscrollAmount > 0.0,
                 child: child!,
-                (ui.Image image, Size size, Offset offset, ui.Canvas canvas) {
+                (  ui.Image image,
+                    Size size,
+                    ui.Canvas canvas,) {
                   shader
                     ..setFloat(0, size.width)
                     ..setFloat(1, size.height)
@@ -121,7 +123,6 @@ class _ApplyShaderState extends State<ApplyShader>
 
                   canvas
                     ..save()
-                    ..translate(offset.dx, offset.dy)
                     ..drawRect(Offset.zero & size, Paint()..shader = shader)
                     ..restore();
                 },

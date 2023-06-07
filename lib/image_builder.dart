@@ -27,14 +27,7 @@ class _ImageBuilderState extends State<ImageBuilder> {
   }
 
   Future<void> getImage() async {
-    final key =
-        await widget.assetImageProvider.obtainKey(ImageConfiguration.empty);
-    widget.assetImageProvider
-        .loadBuffer(
-      key,
-      PaintingBinding.instance.instantiateImageCodecFromBuffer,
-    )
-        .addListener(
+    widget.assetImageProvider.resolve(ImageConfiguration.empty).addListener(
       ImageStreamListener((info, synchronousCall) {
         setState(() {
           image = info.image;
